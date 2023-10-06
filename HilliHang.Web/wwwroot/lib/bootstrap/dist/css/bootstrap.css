@@ -4059,6 +4059,14 @@ textarea.form-control-lg {
     vertical-align: 0;
 }
 
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+
 .dropdown-divider {
     height: 0;
     margin: var(--bs-dropdown-divider-margin-y) 0;
