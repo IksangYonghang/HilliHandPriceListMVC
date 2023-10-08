@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bulky.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,6 @@ namespace Bulky.DataAccess.Repository.IRepository
 		ICategoryRepository Category { get; }
 		IProductRepository Product { get; }
 		void Save();
-	}
+      
+    }
 }

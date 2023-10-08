@@ -1,43 +1,88 @@
 ﻿@model IEnumerable<Product>
 
 <div class="row pb-3">
-	@foreach (var product in Model)
-	{
-		<div class="col-lg-3 col-sm-6">
-			<div class="row p-2">
-				<div class="col-12 p-1">
-					<div class="card boarder-0 p-3 shadow boarder-5 rounded">
-						<img src="@product.ImageUrl" class="card-img-top rounded">
-						<div class="card-body pb-0">
-							<div class="pl-1">
-								<p class="card-title h5 text-dark opacity-100 text-uppercase text-center">@product.ProductName</p>
-								<p class="card-title text-warning text-center">From : <b>@product.Company</b></p>
-							</div>
-							<div class="pl-1">
-								<p class="text-dark opacity-75 text-center mb-0">
-									MRP : <span class="text-decoration-line-through">@product.Mrp.ToString("c")</span>
-								</p>
-							</div>
-							<div class="pl-1">
-								<p class="text-info opacity-100 text-center mb-0">
-									Retail Price : <span>@product.RetailPrice.ToString("c")</span>
-								</p>
-							</div>
-							<div class="pl-1">
-								<p class="text-danger rounded opacity-100 text-center">
-									Whole Sale : <span>@product.WholeSale.ToString("c")</span>
-								</p>
-							</div>
-						</div>
-							<div>
-								<a asp-action="Details" asp-route-productId="@product.Id" class="btn btn-primary bg-gradient boarder-0 form-control">
-									Details
-								</a>
-							</div>
-					</div>
-						
-				</div>
-			</div>
-		</div>
-	}
+    <div class="col-md-12 mb-3">
+        <form asp-action="Search" method="get">
+            <div class="input-group">
+                <input type="text" class="form-control" id="productName" placeholder="Search by Product Name" name="productName">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+
+<div class="row pb-3">
+    <div class="col-md-12">
+        <div id="searchSuggestions"></div>
+    </div>
+</div>
+
+<div class="row pb-3">
+    @foreach (var product in Model)
+    {
+        <div class="col-lg-3 col-sm-6">
+            <div class="row p-2">
+                <div class="col-12 p-1">
+                    <div class="card boarder-0 p-3 shadow boarder-5 rounded custom-shadow">
+                        <img src="@product.ImageUrl" class="card-img-top rounded">
+                        <div class="card-body pb-0">
+                            <div class="pl-1">
+                                <p class="card-title h5 text-dark opacity-100 text-uppercase text-center">@product.ProductName</p>
+                                <p class="card-title text-warning text-center">From: <b>@product.Company</b></p>
+                            </div>
+                            <div class="pl-1">
+                                <p class="text-dark opacity-75 text-center mb-0">
+                                    MRP : <span class="text-decoration-line-through">@product.Mrp.ToString("c")</span>
+                                </p>
+                            </div>
+                            <div class="pl-1">
+                                <p class="text-info opacity-100 text-center mb-0">
+                                    Retail Price : <span>@product.RetailPrice.ToString("c")</span>
+                                </p>
+                            </div>
+                            <div class="pl-1">
+                                <p class="text-danger rounded opacity-100 text-center">
+                                    Whole Sale : <span>@product.WholeSale.ToString("c")</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            <a asp-action="Details" asp-route-productId="@product.Id" class="btn btn-primary bg-gradient border-0 form-control">
+                                Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $("#productName").on("input", function () {
+                var input = $(this).val();
+                if (input.length >= 3) {
+                    $.ajax({
+                        url: "/Customer/Home/SearchSuggestions",
+                        method: "GET",
+                        data: { query: input },
+                        success: function (data) {
+                            var suggestionsHtml = '<ul>';
+                            $.each(data, function (index, item) {
+                                suggestionsHtml += '<li>' + item.productName + '</li>';
+                            });
+                            suggestionsHtml += '</ul>';
+                            $("#searchSuggestions").html(suggestionsHtml);
+                        }
+                    });
+                } else {
+                    $("#searchSuggestions").empty();
+                }
+            });
+        });
+    </script>
+}
