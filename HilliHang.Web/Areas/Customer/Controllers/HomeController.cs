@@ -29,7 +29,7 @@ namespace BulkyWeb.Areas.Customer.Controllers
             return View(product);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Contact()
         {
             return View();
         }
@@ -40,19 +40,15 @@ namespace BulkyWeb.Areas.Customer.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [HttpGet] // Add this attribute for handling AJAX GET requests
+        [HttpGet] 
         public IActionResult SearchSuggestions(string query)
         {
             // Query the database for product suggestions based on the 'query' parameter
-            var suggestions = _unitOfWork.Product
-                .GetProductsByName(query)
-                .Select(product => new { productName = product.ProductName })
-                .ToList();
-
+            var suggestions = _unitOfWork.Product.GetProductsByName(query).Select(product => new { productName = product.ProductName }).ToList();
             return Json(suggestions);
         }
 
-        // This is your existing Search action for rendering the search results view
+       
         [HttpGet]
         public IActionResult Search(string productName)
         {

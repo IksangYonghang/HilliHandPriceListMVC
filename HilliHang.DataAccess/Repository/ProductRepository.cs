@@ -46,10 +46,7 @@ namespace Bulky.DataAccess.Repository
         {
             productName = productName.ToLower(); // Convert the search string to lowercase.
 
-            return _dbContext.Products
-                .Include(p => p.Category)
-                .Where(p => p.ProductName.ToLower().Contains(productName))
-                .ToList();
+            return _dbContext.Products.Include(p => p.Category).Where(p => p.ProductName.ToLower().Contains(productName)).ToList();
         }
 
 
